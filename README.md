@@ -44,6 +44,8 @@ This project does not provide step-by-step build instructions. To compile the so
 *   **MiSans**
     *   The UI utilizes the MiSans font for enhanced readability.
     *   [https://hyperos.mi.com/font/download](https://hyperos.mi.com/font/download)
+*   **StarPwn**
+    *   [https://github.com/StarPwn](https://github.com/StarPwn)
 
 ## ⚖️ License
 

@@ -46,6 +46,8 @@
 *   **MiSans**
     *   本客户端 UI 默认搭载了小米 **MiSans** 字体，以提供清晰舒适的阅读体验。
     *   [https://hyperos.mi.com/font/download](https://hyperos.mi.com/font/download)
+*   **StarPwn**
+    *   [https://github.com/StarPwn](https://github.com/StarPwn)
 
 ## ⚖️ 开源协议 (License)
 
