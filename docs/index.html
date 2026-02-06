@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aqua Client - Minecraft Bedrock 1.21.9x</title>
+    <!-- 引入 FontAwesome 图标 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- 引入 Google Fonts (作为 MiSans 的 Web 替代方案) -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary: #00f2ea;
+            --secondary: #0078d6;
+            --bg-dark: #0a0a12;
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --text-main: #ffffff;
+            --text-muted: #a0a0b0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', 'MiSans', system-ui, -apple-system, sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* 动态背景动画 */
+        .background-glow {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            background: radial-gradient(circle at 50% 50%, #001f3f 0%, #0a0a12 100%);
+        }
+        
+        .blob {
+            position: absolute;
+            filter: blur(80px);
+            opacity: 0.4;
+            animation: float 10s infinite ease-in-out;
+        }
+
+        .blob-1 { top: -10%; left: -10%; width: 500px; height: 500px; background: var(--secondary); animation-delay: 0s; }
+        .blob-2 { bottom: -10%; right: -10%; width: 600px; height: 600px; background: var(--primary); animation-delay: -5s; }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(30px, 50px); }
+        }
+
+        /* 导航栏 */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 2rem 5%;
+            backdrop-filter: blur(10px);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo i { color: var(--primary); }
+
+        .nav-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            margin-left: 2rem;
+            transition: 0.3s;
+        }
+
+        .nav-links a:hover { color: var(--primary); }
+
+        /* 主屏 Hero Section */
+        header {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 0 5%;
+            padding-top: 80px;
+        }
+
+        .badge {
+            background: rgba(0, 242, 234, 0.1);
+            color: var(--primary);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            border: 1px solid rgba(0, 242, 234, 0.3);
+            margin-bottom: 1.5rem;
+            display: inline-block;
+        }
+
+        h1 {
+            font-size: 4rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #fff 0%, var(--primary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1.5rem;
+            line-height: 1.1;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            max-width: 600px;
+            margin-bottom: 3rem;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: #000;
+            box-shadow: 0 0 20px rgba(0, 242, 234, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 0 30px rgba(0, 242, 234, 0.5);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(5px);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-3px);
+        }
+
+        /* 特性区域 */
+        .features {
+            padding: 5rem 5%;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 2rem;
+            backdrop-filter: blur(10px);
+            transition: 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
+        }
+
+        .card-icon {
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            background: rgba(0, 242, 234, 0.1);
+            width: 60px;
+            height: 60px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 15px;
+        }
+
+        .card h3 {
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .card p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        /* 代码/环境区域 */
+        .tech-section {
+            padding: 5rem 5%;
+            text-align: center;
+        }
+
+        .code-block {
+            background: #000;
+            border: 1px solid #333;
+            border-radius: 15px;
+            padding: 2rem;
+            max-width: 700px;
+            margin: 2rem auto;
+            text-align: left;
+            font-family: 'Consolas', monospace;
+            color: #d4d4d4;
+            position: relative;
+        }
+
+        .code-header {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 1rem;
+        }
+
+        .dot { width: 12px; height: 12px; border-radius: 50%; }
+        .dot.red { background: #ff5f56; }
+        .dot.yellow { background: #ffbd2e; }
+        .dot.green { background: #27c93f; }
+
+        .cmd { color: var(--primary); }
+        .arg { color: #fff; }
+
+        /* 页脚 */
+        footer {
+            border-top: 1px solid var(--glass-border);
+            padding: 3rem 5%;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .footer-links {
+            margin-bottom: 1.5rem;
+        }
+
+        .footer-links a {
+            color: var(--text-main);
+            text-decoration: none;
+            margin: 0 10px;
+            border-bottom: 1px dotted var(--text-muted);
+        }
+
+        .footer-links a:hover {
+            color: var(--primary);
+            border-bottom: 1px solid var(--primary);
+        }
+
+        /* 移动端适配 */
+        @media (max-width: 768px) {
+            h1 { font-size: 2.5rem; }
+            .btn-group { flex-direction: column; width: 100%; }
+            .btn { width: 100%; justify-content: center; }
+            nav { display: none; } /* 移动端简化隐藏导航 */
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 背景特效 -->
+    <div class="background-glow">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+    </div>
+
+    <!-- 导航 -->
+    <nav>
+        <div class="logo">
+            <i class="fa-solid fa-water"></i> Aqua
+        </div>
+        <div class="nav-links">
+            <a href="#features">Features</a>
+            <a href="#install">Environment</a>
+            <a href="https://github.com/1nineovo/Aqua-Open-SRC" target="_blank"><i class="fa-brands fa-github"></i> GitHub</a>
+        </div>
+    </nav>
+
+    <!-- 主视觉 -->
+    <header>
+        <div class="badge">
+            <i class="fa-solid fa-cube"></i> Minecraft Bedrock 1.21.9x
+        </div>
+        <h1>Next Level Hook Client<br>for Bedrock Edition</h1>
+        <p class="subtitle">
+            Open Source. High Performance. Fully ImGui based.<br>
+            Aqua Client delivers the ultimate development platform for MCBE.
+        </p>
+        
+        <div class="btn-group">
+            <a href="https://github.com/1nineovo/Aqua-Open-SRC" target="_blank" class="btn btn-primary">
+                <i class="fa-brands fa-github"></i> View on GitHub
+            </a>
+            <a href="#features" class="btn btn-secondary">
+                <i class="fa-solid fa-arrow-down"></i> Learn More
+            </a>
+        </div>
+    </header>
+
+    <!-- 特性卡片 -->
+    <section class="features" id="features">
+        <div class="card">
+            <div class="card-icon"><i class="fa-solid fa-paintbrush"></i></div>
+            <h3>Full ImGui Rendering</h3>
+            <p>Experience a buttery smooth UI built entirely with Dear ImGui. Customizable, modern, and overlay-free rendering pipeline.</p>
+        </div>
+        <div class="card">
+            <div class="card-icon"><i class="fa-solid fa-book-open"></i></div>
+            <h3>Extensive SDK</h3>
+            <p>Comes with a comprehensive SDK wrapper for the Bedrock engine. Simplifies memory interaction and mod development significantly.</p>
+        </div>
+        <div class="card">
+            <div class="card-icon"><i class="fa-solid fa-sitemap"></i></div>
+            <h3>Clean Architecture</h3>
+            <p>Modular and well-structured C++ codebase. Designed for readability, making it the perfect learning resource for internal cheat development.</p>
+        </div>
+        <div class="card">
+            <div class="card-icon"><i class="fa-solid fa-bolt"></i></div>
+            <h3>Internal Hook</h3>
+            <p>Direct memory hooking ensures minimal latency and maximum performance compared to external overlays. Optimized for 1.21.9x.</p>
+        </div>
+    </section>
+
+    <!-- 开发环境 -->
+    <section class="tech-section" id="install">
+        <h2 style="font-size: 2.5rem; margin-bottom: 1rem;">Build Environment</h2>
+        <p style="color: var(--text-muted); margin-bottom: 2rem;">No pre-built binaries. Compile it yourself.</p>
+        
+        <div class="code-block">
+            <div class="code-header">
+                <div class="dot red"></div>
+                <div class="dot yellow"></div>
+                <div class="dot green"></div>
+            </div>
+            <p style="margin-bottom: 10px; color: #888;"># Requirements</p>
+            <p>> Visual Studio 2022 <span style="color: #666;">(Latest)</span></p>
+            <p>> Windows 10/11 SDK</p>
+            <p>> C++ 20 Standard</p>
+            <br>
+            <p style="margin-bottom: 10px; color: #888;"># Clone Repository</p>
+            <p><span class="cmd">git</span> clone <span class="arg">https://github.com/1nineovo/Aqua-Open-SRC.git</span></p>
+        </div>
+    </section>
+
+    <!-- 页脚 -->
+    <footer>
+        <div class="footer-links">
+            <span style="color: #666; margin-right: 10px;">Credits:</span>
+            <a href="https://github.com/ocornut/imgui" target="_blank">Dear ImGui</a>
+            <a href="https://hyperos.mi.com/font/download" target="_blank">MiSans</a>
+        </div>
+        <p>Released under the <span style="color: var(--primary);">MIT License</span>.</p>
+        <p style="margin-top: 10px; font-size: 0.8rem; opacity: 0.6;">
+            Made with ❤️ by 1nineovo. Not affiliated with Mojang Studios or Microsoft.
+        </p>
+    </footer>
+
+</body>
+</html>
